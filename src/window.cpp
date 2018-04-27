@@ -446,16 +446,6 @@ void windowRun() {
 			lastWindowTitle = windowTitle;
 		}
 
-		// Get desired scaling
-		float pixelRatio;
-		glfwGetWindowContentScale(gWindow, &pixelRatio, NULL);
-		pixelRatio = roundf(pixelRatio);
-		if (pixelRatio != gPixelRatio) {
-			EventZoom eZoom;
-			gScene->onZoom(eZoom);
-			gPixelRatio = pixelRatio;
-		}
-
 		// Get framebuffer/window ratio
 		int width, height;
 		glfwGetFramebufferSize(gWindow, &width, &height);
