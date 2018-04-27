@@ -3,7 +3,7 @@ VERSION = 0.6.0
 
 FLAGS += \
 	-Iinclude \
-	-Idep/include -Idep/lib/libzip/include
+	-Idep/include
 
 ifdef RELEASE
 	FLAGS += -DRELEASE
@@ -27,25 +27,14 @@ ifeq ($(ARCH), lin)
 	TARGET := Rack
 endif
 
-ifeq ($(ARCH), mac)
-	SOURCES += dep/osdialog/osdialog_mac.m
-	CXXFLAGS += -stdlib=libc++
-	LDFLAGS += -stdlib=libc++ -lpthread -ldl \
-		-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo \
-		-Ldep/lib -lGLEW -lglfw -ljansson -lspeexdsp -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl
+ifeq ($(ARCH), lin)
+	SOURCES += dep/osdialog/osdialog_gtk2.c
+	CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
+	LDFLAGS += -rdynamic \
+		-lpthread -lGL -ldl -lX11 -lasound -ljack \
+		$(shell pkg-config --libs gtk+-2.0) \
+		-lglfw3 -lGLEW -ljansson -lspeexdsp -lzip -lz -lrtmidi -lrtaudio -lcurl -lssl -lcrypto
 	TARGET := Rack
-	BUNDLE := dist/$(TARGET).app
-endif
-
-ifeq ($(ARCH), win)
-	SOURCES += dep/osdialog/osdialog_win.c
-	LDFLAGS += -static-libgcc -static-libstdc++ -lpthread -lws2_32 \
-		-Wl,--export-all-symbols,--out-implib,libRack.a -mwindows \
-		-lgdi32 -lopengl32 -lcomdlg32 -lole32 \
-		-Ldep/lib -lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
-		-Wl,-Bstatic -ljansson -lspeexdsp
-	TARGET := Rack.exe
-	OBJECTS += Rack.res
 endif
 
 
