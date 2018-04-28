@@ -329,6 +329,12 @@ void pluginInit() {
 	init(corePlugin);
 	gPlugins.push_back(corePlugin);
 
+	// Load global plugins directory
+	std::string globalPlugins = assetGlobal("plugins");
+	if (systemIsDirectory(globalPlugins)) {
+		loadPlugins (globalPlugins);
+	}
+
 	// Get local plugins directory
 	std::string localPlugins = assetLocal("plugins");
 	mkdir(localPlugins.c_str(), 0755);
