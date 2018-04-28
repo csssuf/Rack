@@ -41,11 +41,14 @@ std::string assetGlobal(std::string filename) {
 	dir = ".";
 #endif
 #if ARCH_LIN
-	// TODO For now, users should launch Rack from their terminal in the global directory
-	dir = ".";
+	dir = "/usr/share/vcvrack";
 #endif
 #else // RELEASE
+#if ARCH_LIN
+	dir = "/usr/share/vcvrack/";
+#else
 	dir = ".";
+#endif
 #endif // RELEASE
 	return dir + "/" + filename;
 }
